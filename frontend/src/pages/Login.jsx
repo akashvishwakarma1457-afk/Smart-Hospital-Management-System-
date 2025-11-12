@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom'
 const Login = () => {
 
   const [state, setState] = useState('Sign Up')
-
-  const [name, setName] = useState('')
+   const [laoding ,setLoading]=useState(false) ;
+   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,11 +17,10 @@ const Login = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-
+       setEmail(true)
+       try{
     if (state === 'Sign Up') {
-
       const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
-
       if (data.success) {
         localStorage.setItem('token', data.token)
         setToken(data.token)
@@ -32,7 +31,6 @@ const Login = () => {
     } else {
 
       const { data } = await axios.post(backendUrl + '/api/user/login', { email, password })
-
       if (data.success) {
         localStorage.setItem('token', data.token)
         setToken(data.token)
@@ -40,6 +38,10 @@ const Login = () => {
         toast.error(data.message)
       }
 
+    }}catch(error){
+      toast.error("Fail to create account !")
+    }finally{
+      setLoading(false)
     }
 
   }
@@ -70,7 +72,19 @@ const Login = () => {
           <p>Password</p>
           <input onChange={(e) => setPassword(e.target.value)} value={password} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required />
         </div>
-        <button className='bg-primary text-white w-full py-2 my-2 rounded-md text-base'>{state === 'Sign Up' ? 'Create account' : 'Login'}</button>
+        
+        <button className='bg-primary text-white w-full py-2 my-2 rounded-md text-base'>
+            
+             
+          {state === 'Sign Up' ? <>
+          {laoding ? "Creating your account" :"Create account"}
+          </> :
+          <>
+          {laoding ? "Loging to account " :"Login "}
+          </>
+          }
+          
+          </button>
         {state === 'Sign Up'
           ? <p>Already have an account? <span onClick={() => setState('Login')} className='text-primary underline cursor-pointer'>Login here</span></p>
           : <p>Create an new account? <span onClick={() => setState('Sign Up')} className='text-primary underline cursor-pointer'>Click here</span></p>
