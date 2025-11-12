@@ -62,7 +62,7 @@ With features like secure authentication, responsive design, and a clean UI, Med
 ## Setup & Installation
 1. Clone the repo  
    ```bash
-   git clone https://github.com/pritamchaudhary/Mediqo.git
+    https://github.com/akashvishwakarma1457-afk/Smart-Hospital-Management-System-.git
    cd Mediqo
 2. Install dependencies
   # for frontend
